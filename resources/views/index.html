@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Animated</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Theme variables */
+        :root {
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-card: rgba(96, 165, 250, 0.1);
+            --bg-hover: rgba(96, 165, 250, 0.05);
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --border-color: rgba(96, 165, 250, 0.2);
+            --shadow-color: rgba(96, 165, 250, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: rgba(96, 165, 250, 0.05);
+            --bg-hover: rgba(96, 165, 250, 0.1);
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --border-color: rgba(96, 165, 250, 0.3);
+            --shadow-color: rgba(96, 165, 250, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(96, 165, 250, 0.6);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in-left {
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.3), transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(96, 165, 250, 0.4);
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+
+        /* Gradient backgrounds */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+        }
+
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            transition: background 0.3s ease;
+        }
+
+        .bg-gradient-card {
+            background: var(--bg-card);
+            transition: background 0.3s ease;
+        }
+
+        .theme-bg-secondary {
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-border {
+            border-color: var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .theme-text-primary {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .theme-text-secondary {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #60A5FA;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3B82F6;
+        }
+
+        /* Theme toggle animation */
+        .theme-toggle-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(96, 165, 250, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .theme-toggle-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body class="font-sans" style="background-color: var(--bg-primary); color: var(--text-primary);">
+    
+    <!-- Mobile Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gradient-dark theme-border border-r z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <!-- Logo -->
+        <div class="p-6 theme-border border-b animate-slide-in-left">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center animate-pulse-glow">
+                    <i class="fas fa-crown text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-blue-400">AdminPro</h1>
+                    <p class="text-xs theme-text-secondary">Dashboard v2.0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="p-4 space-y-2">
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-primary text-white animate-slide-in-left delay-100">
+                <i class="fas fa-home text-lg"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-400/10 transition-all duration-300 theme-text-secondary hover:text-blue-400 animate-slide-in-left delay-200">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-400/10 transition-all duration-300 theme-text-secondary hover:text-blue-400 animate-slide-in-left delay-300">
+                <i class="fas fa-users text-lg"></i>
+                <span class="font-medium">Users</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-400/10 transition-all duration-300 theme-text-secondary hover:text-blue-400 animate-slide-in-left delay-400">
+                <i class="fas fa-box text-lg"></i>
+                <span class="font-medium">Products</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-400/10 transition-all duration-300 theme-text-secondary hover:text-blue-400 animate-slide-in-left delay-500">
+                <i class="fas fa-shopping-cart text-lg"></i>
+                <span class="font-medium">Orders</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-blue-400/10 transition-all duration-300 theme-text-secondary hover:text-blue-400 animate-slide-in-left delay-600">
+                <i class="fas fa-cog text-lg"></i>
+                <span class="font-medium">Settings</span>
+            </a>
+        </nav>
+
+        <!-- Bottom Section -->
+        <div class="absolute bottom-0 left-0 right-0 p-4 theme-border border-t">
+            <div class="flex items-center space-x-3 px-4 py-3">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=60A5FA&color=fff" alt="Admin" class="w-10 h-10 rounded-full animate-pulse-glow">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-blue-400">Admin User</p>
+                    <p class="text-xs theme-text-secondary">admin@example.com</p>
+                </div>
+                <i class="fas fa-sign-out-alt theme-text-secondary hover:text-blue-400 cursor-pointer transition-colors"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 min-h-screen">
+        
+        <!-- Header -->
+        <header class="bg-gradient-dark theme-border border-b sticky top-0 z-40">
+            <div class="px-4 sm:px-8 py-4 flex items-center justify-between">
+                <!-- Mobile Menu Button -->
+                <button id="menuBtn" class="lg:hidden p-2 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 mr-4">
+                    <i class="fas fa-bars text-blue-400 text-xl"></i>
+                </button>
+
+                <div class="animate-fade-in-up flex-1">
+                    <h2 class="text-xl sm:text-2xl font-bold text-blue-400">Dashboard Overview</h2>
+                    <p class="text-xs sm:text-sm theme-text-secondary hidden sm:block">Welcome back, Admin! Here's what's happening today.</p>
+                </div>
+                
+                <div class="flex items-center space-x-2 sm:space-x-4 animate-fade-in-up delay-200">
+                    <div class="relative hidden md:block">
+                        <input type="text" placeholder="Search..." class="px-4 py-2 pl-10 theme-bg-secondary theme-border border rounded-lg focus:outline-none focus:border-blue-400 transition-all theme-text-primary w-48 lg:w-64">
+                        <i class="fas fa-search absolute left-3 top-3 theme-text-secondary"></i>
+                    </div>
+                    
+                    <button class="md:hidden p-2 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300">
+                        <i class="fas fa-search text-blue-400 text-lg"></i>
+                    </button>
+
+                    <!-- Theme Toggle Button -->
+                    <button id="themeToggle" class="theme-toggle-btn p-2 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 relative">
+                        <i class="fas fa-sun text-blue-400 text-lg" id="lightIcon"></i>
+                        <i class="fas fa-moon text-blue-400 text-lg hidden" id="darkIcon"></i>
+                    </button>
+                    
+                    <button class="relative p-2 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300">
+                        <i class="fas fa-bell text-blue-400 text-lg"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center animate-pulse text-white">3</span>
+                    </button>
+                    
+                    <button class="p-2 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 hidden sm:block">
+                        <i class="fas fa-envelope text-blue-400 text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="p-4 sm:p-6 lg:p-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                
+                <!-- Card 1 -->
+                <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-6 card-hover animate-fade-in-up">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center animate-float">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <span class="text-green-400 text-sm font-medium flex items-center">
+                            <i class="fas fa-arrow-up mr-1"></i>12.5%
+                        </span>
+                    </div>
+                    <h3 class="theme-text-secondary text-sm mb-1">Total Users</h3>
+                    <p class="text-3xl font-bold text-blue-400">24,583</p>
+                    <div class="mt-4 w-full theme-bg-secondary rounded-full h-2">
+                        <div class="bg-gradient-primary h-2 rounded-full shimmer" style="width: 75%"></div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-6 card-hover animate-fade-in-up delay-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center animate-float" style="animation-delay: 0.5s">
+                            <i class="fas fa-dollar-sign text-white text-xl"></i>
+                        </div>
+                        <span class="text-green-400 text-sm font-medium flex items-center">
+                            <i class="fas fa-arrow-up mr-1"></i>8.2%
+                        </span>
+                    </div>
+                    <h3 class="theme-text-secondary text-sm mb-1">Revenue</h3>
+                    <p class="text-3xl font-bold text-blue-400">$125,890</p>
+                    <div class="mt-4 w-full theme-bg-secondary rounded-full h-2">
+                        <div class="bg-gradient-primary h-2 rounded-full shimmer" style="width: 85%"></div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-6 card-hover animate-fade-in-up delay-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center animate-float" style="animation-delay: 1s">
+                            <i class="fas fa-shopping-cart text-white text-xl"></i>
+                        </div>
+                        <span class="text-red-400 text-sm font-medium flex items-center">
+                            <i class="fas fa-arrow-down mr-1"></i>3.1%
+                        </span>
+                    </div>
+                    <h3 class="theme-text-secondary text-sm mb-1">Orders</h3>
+                    <p class="text-3xl font-bold text-blue-400">1,458</p>
+                    <div class="mt-4 w-full theme-bg-secondary rounded-full h-2">
+                        <div class="bg-gradient-primary h-2 rounded-full shimmer" style="width: 60%"></div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-6 card-hover animate-fade-in-up delay-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center animate-float" style="animation-delay: 1.5s">
+                            <i class="fas fa-chart-line text-white text-xl"></i>
+                        </div>
+                        <span class="text-green-400 text-sm font-medium flex items-center">
+                            <i class="fas fa-arrow-up mr-1"></i>15.8%
+                        </span>
+                    </div>
+                    <h3 class="theme-text-secondary text-sm mb-1">Growth</h3>
+                    <p class="text-3xl font-bold text-blue-400">+24.3%</p>
+                    <div class="mt-4 w-full theme-bg-secondary rounded-full h-2">
+                        <div class="bg-gradient-primary h-2 rounded-full shimmer" style="width: 90%"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Charts and Tables Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                
+                <!-- Recent Activity -->
+                <div class="lg:col-span-2 bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-4 sm:p-6 animate-fade-in-up delay-400">
+                    <div class="flex items-center justify-between mb-4 sm:mb-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-blue-400">Recent Activity</h3>
+                        <button class="text-xs sm:text-sm theme-text-secondary hover:text-blue-400 transition-colors">View All</button>
+                    </div>
+                    
+                    <div class="space-y-3 sm:space-y-4">
+                        <div class="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center animate-pulse-glow">
+                                <i class="fas fa-user-plus text-white"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium theme-text-primary truncate">New user registered</p>
+                                <p class="text-xs theme-text-secondary truncate">John Doe joined the platform</p>
+                            </div>
+                            <span class="text-xs theme-text-secondary whitespace-nowrap">2m ago</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center animate-pulse-glow">
+                                <i class="fas fa-shopping-bag text-white"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium theme-text-primary truncate">New order placed</p>
+                                <p class="text-xs theme-text-secondary truncate">Order #12345 - $234.00</p>
+                            </div>
+                            <span class="text-xs theme-text-secondary whitespace-nowrap">15m ago</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center animate-pulse-glow">
+                                <i class="fas fa-star text-white"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium theme-text-primary truncate">New review received</p>
+                                <p class="text-xs theme-text-secondary truncate">5-star rating on Product X</p>
+                            </div>
+                            <span class="text-xs theme-text-secondary whitespace-nowrap">1h ago</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 theme-bg-secondary rounded-lg hover:bg-blue-400/10 transition-all duration-300 cursor-pointer">
+                            <div class="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center animate-pulse-glow">
+                                <i class="fas fa-box text-white"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium theme-text-primary truncate">Product updated</p>
+                                <p class="text-xs theme-text-secondary truncate">Updated inventory for Item #456</p>
+                            </div>
+                            <span class="text-xs theme-text-secondary whitespace-nowrap">3h ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="space-y-4 sm:space-y-6 animate-fade-in-up delay-500">
+                    
+                    <!-- Top Products -->
+                    <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-4 sm:p-6">
+                        <h3 class="text-lg font-bold text-blue-400 mb-4">Top Products</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-gradient-primary rounded-lg"></div>
+                                    <div>
+                                        <p class="text-sm font-medium theme-text-primary">Product A</p>
+                                        <p class="text-xs theme-text-secondary">2,458 sales</p>
+                                    </div>
+                                </div>
+                                <span class="text-blue-400 font-medium">$12.5K</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-lg"></div>
+                                    <div>
+                                        <p class="text-sm font-medium theme-text-primary">Product B</p>
+                                        <p class="text-xs theme-text-secondary">1,892 sales</p>
+                                    </div>
+                                </div>
+                                <span class="text-blue-400 font-medium">$9.8K</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg"></div>
+                                    <div>
+                                        <p class="text-sm font-medium theme-text-primary">Product C</p>
+                                        <p class="text-xs theme-text-secondary">1,234 sales</p>
+                                    </div>
+                                </div>
+                                <span class="text-blue-400 font-medium">$7.2K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-4 sm:p-6">
+                        <h3 class="text-lg font-bold text-blue-400 mb-4">Quick Actions</h3>
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                            <button class="p-3 bg-gradient-primary rounded-lg hover:shadow-lg hover:shadow-blue-400/50 transition-all duration-300 text-white font-medium">
+                                <i class="fas fa-plus mb-2 text-xl"></i>
+                                <p class="text-xs">Add User</p>
+                            </button>
+                            <button class="p-3 bg-blue-500 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 text-white font-medium">
+                                <i class="fas fa-box mb-2 text-xl"></i>
+                                <p class="text-xs">New Product</p>
+                            </button>
+                            <button class="p-3 bg-blue-600 rounded-lg hover:shadow-lg hover:shadow-blue-600/50 transition-all duration-300 text-white font-medium">
+                                <i class="fas fa-file-invoice mb-2 text-xl"></i>
+                                <p class="text-xs">Generate Report</p>
+                            </button>
+                            <button class="p-3 bg-gradient-primary rounded-lg hover:shadow-lg hover:shadow-blue-400/50 transition-all duration-300 text-white font-medium">
+                                <i class="fas fa-cog mb-2 text-xl"></i>
+                                <p class="text-xs">Settings</p>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Latest Orders Table -->
+            <div class="bg-gradient-card backdrop-blur-sm theme-border border rounded-xl p-4 sm:p-6 animate-fade-in-up delay-600">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-400">Latest Orders</h3>
+                    <button class="px-3 sm:px-4 py-2 bg-gradient-primary text-white rounded-lg hover:shadow-lg hover:shadow-blue-400/50 transition-all duration-300 text-sm">
+                        View All Orders
+                    </button>
+                </div>
+                
+                <div class="overflow-x-auto -mx-4 sm:mx-0">
+                    <div class="inline-block min-w-full align-middle">
+                        <div class="overflow-hidden">
+                            <table class="min-w-full">
+                        <thead>
+                            <tr class="theme-border border-b">
+                                <th class="text-left py-3 px-3 sm:px-4 theme-text-secondary font-medium text-xs sm:text-sm whitespace-nowrap">Order ID</th>
+                                <th class="text-left py-3 px-3 sm:px-4 theme-text-secondary font-medium text-xs sm:text-sm whitespace-nowrap">Customer</th>
+                                <th class="text-left py-3 px-3 sm:px-4 theme-text-secondary font-medium text-xs sm:text-sm whitespace-nowrap hidden md:table-cell">Product</th>
+                                <th class="text-left py-3 px-3 sm:px-4 theme-text-secondary font-medium text-xs sm:text-sm whitespace-nowrap">Amount</th>
+                                <th class="text-left py-3 px-3 sm:px-4 theme-text-secondary font-medium text-xs sm:text-sm whitespace-nowrap">Status</th>
+                                <th class="text-left py-3 px-3 sm:px-4 theme-text-secondary font-medium text-xs sm:text-sm whitespace-nowrap">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="theme-border border-b hover:bg-blue-400/10 transition-all duration-300">
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 text-blue-400 font-medium text-sm whitespace-nowrap">#12345</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">John Smith</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap hidden md:table-cell">Product A</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">$234.00</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <span class="px-2 sm:px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-medium whitespace-nowrap">Completed</span>
+                                </td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 transition-colors">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="theme-border border-b hover:bg-blue-400/10 transition-all duration-300">
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 text-blue-400 font-medium text-sm whitespace-nowrap">#12344</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">Jane Doe</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap hidden md:table-cell">Product B</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">$156.00</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <span class="px-2 sm:px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full text-xs font-medium whitespace-nowrap">Pending</span>
+                                </td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 transition-colors">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="theme-border border-b hover:bg-blue-400/10 transition-all duration-300">
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 text-blue-400 font-medium text-sm whitespace-nowrap">#12343</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">Mike Johnson</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap hidden md:table-cell">Product C</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">$89.00</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <span class="px-2 sm:px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs font-medium whitespace-nowrap">Processing</span>
+                                </td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 transition-colors">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="theme-border border-b hover:bg-blue-400/10 transition-all duration-300">
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 text-blue-400 font-medium text-sm whitespace-nowrap">#12342</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">Sarah Wilson</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap hidden md:table-cell">Product D</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">$345.00</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <span class="px-2 sm:px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-medium whitespace-nowrap">Completed</span>
+                                </td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 transition-colors">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-blue-400/10 transition-all duration-300">
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 text-blue-400 font-medium text-sm whitespace-nowrap">#12341</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">Tom Brown</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap hidden md:table-cell">Product E</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4 theme-text-primary text-sm whitespace-nowrap">$123.00</td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <span class="px-2 sm:px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-xs font-medium whitespace-nowrap">Cancelled</span>
+                                </td>
+                                <td class="py-3 sm:py-4 px-3 sm:px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 transition-colors">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or default to 'dark'
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', currentTheme);
+        
+        // Update icon based on current theme
+        if (currentTheme === 'light') {
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Toggle icons with animation
+            if (newTheme === 'light') {
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+            } else {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        // Close sidebar on window resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        });
+
+        // Add intersection observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.animate-fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+
+</body>
+</html>
