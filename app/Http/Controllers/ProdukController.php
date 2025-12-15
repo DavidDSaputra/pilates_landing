@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
-use App\Models\KategoriProduk;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -14,35 +14,30 @@ class ProdukController extends Controller
 {
     public function index(Request $request)
     {
-        $produk = Produk::with(['kategori', 'gambar'])
+        $produk = Produk::with(['gambar'])
             ->when($request->search, function ($query) use ($request) {
                 $query->where('nama_produk', 'like', "%{$request->search}%")
                     ->orWhere('deskripsi_lengkap', 'like', "%{$request->search}%")
                     ->orWhere('slug', 'like', "%{$request->search}%");
             })
-            ->when($request->kategori, function ($query) use ($request) {
-                $query->where('kategori_id', $request->kategori);
-            })
+
             ->latest()
             ->paginate(15)
             ->appends($request->all());
 
-        $kategori = KategoriProduk::orderBy('nama_kategori')->get();
-
-        return view('admin.produk.index', compact('produk', 'kategori'));
+        return view('admin.produk.index', compact('produk'));
     }
 
     public function create()
     {
-        $kategori = KategoriProduk::all();
-        return view('admin.produk.create', compact('kategori'));
+        return view('admin.produk.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'kategori_id' => 'required|exists:kategori_produk,id',
+
             'deskripsi_lengkap' => 'nullable|string',
             'gambar_utama' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'gambar_produk.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -82,15 +77,14 @@ class ProdukController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with(['kategori', 'gambar'])->findOrFail($id);
+        $produk = Produk::with(['gambar'])->findOrFail($id);
         return view('admin.produk.show', compact('produk'));
     }
 
     public function edit($id)
     {
         $produk = Produk::with('gambar')->findOrFail($id);
-        $kategori = KategoriProduk::all();
-        return view('admin.produk.edit', compact('produk', 'kategori'));
+        return view('admin.produk.edit', compact('produk'));
     }
 
     public function update(Request $request, $id)
@@ -99,7 +93,7 @@ class ProdukController extends Controller
 
         $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'kategori_id' => 'required|exists:kategori_produk,id',
+
             'deskripsi_lengkap' => 'nullable|string',
             'gambar_utama' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'gambar_produk.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -176,65 +170,51 @@ class ProdukController extends Controller
     // Frontend Methods
     public function list(Request $request)
     {
-        $produks = Produk::with('kategori', 'gambar')
-            ->when($request->kategori, function ($query) use ($request) {
-                $query->whereHas('kategori', function ($q) use ($request) {
-                    $q->where('slug', $request->kategori);
-                });
-            })
+        $produks = Produk::with('gambar')
             ->latest()
             ->paginate(12);
 
-        $kategoris = KategoriProduk::orderBy('urutan')->get();
-
-        return view('produk.index', compact('produks', 'kategoris'));
+        return view('produk.index', compact('produks'));
     }
 
     public function searchFrontend(Request $request)
     {
         $query = $request->input('q');
-        $produks = Produk::with('kategori', 'gambar')
+        $produks = Produk::with('gambar')
             ->where('nama_produk', 'like', "%{$query}%")
             ->orWhere('deskripsi_lengkap', 'like', "%{$query}%")
             ->paginate(12);
 
-        $kategoris = KategoriProduk::orderBy('urutan')->get();
-
-        return view('produk.search', compact('produks', 'query', 'kategoris'));
+        return view('produk.search', compact('produks', 'query'));
     }
 
     public function terlaris()
     {
         // Placeholder: In a real app, this would query order details
-        $produks = Produk::with('kategori', 'gambar')
+        $produks = Produk::with('gambar')
             ->inRandomOrder()
             ->take(12)
             ->get();
 
-        $kategoris = KategoriProduk::orderBy('urutan')->get();
-
-        return view('produk.terlaris', compact('produks', 'kategoris'));
+        return view('produk.terlaris', compact('produks'));
     }
 
     public function rekomendasi()
     {
-        $produks = Produk::with('kategori', 'gambar')
+        $produks = Produk::with('gambar')
             ->where('rekomendasi', 'yes')
             ->paginate(12);
 
-        $kategoris = KategoriProduk::orderBy('urutan')->get();
-
-        return view('produk.rekomendasi', compact('produks', 'kategoris'));
+        return view('produk.rekomendasi', compact('produks'));
     }
 
     public function detail($slug)
     {
-        $produk = Produk::with('kategori', 'gambar')
+        $produk = Produk::with('gambar')
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $relatedProducts = Produk::where('kategori_id', $produk->kategori_id)
-            ->where('id', '!=', $produk->id)
+        $relatedProducts = Produk::where('id', '!=', $produk->id)
             ->take(4)
             ->get();
 

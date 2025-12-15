@@ -29,7 +29,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Resource Routes
     Route::resource('artikels', ArtikelController::class);
-    Route::resource('kategori-produks', \App\Http\Controllers\KategoriProdukController::class);
     Route::delete('produk/gambar/{id}', [ProdukController::class, 'deleteImage'])->name('produk.delete-image');
     Route::resource('produk', ProdukController::class);
     Route::resource('users', \App\Http\Controllers\UserController::class);

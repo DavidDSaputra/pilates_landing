@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produk;
-use App\Models\KategoriProduk;
+
 use App\Models\Artikel;
 
 use App\Models\Testimoni;
@@ -13,14 +13,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Fetch categories and sample products
-        $categories = KategoriProduk::orderBy('urutan', 'asc')->get();
-
         // Get featured / rekomendasi products first, falling back to latest products
         $featured = Produk::where('rekomendasi', 'yes')->take(8)->get();
 
         // For the grid, we'll show products with gambar_utama or the first gambar
-        $products = Produk::with('gambar', 'kategori')->orderBy('created_at', 'desc')->take(24)->get();
+        $products = Produk::with('gambar')->orderBy('created_at', 'desc')->take(24)->get();
 
         // Get latest 3 published articles
         $latestArticles = Artikel::with('penulis')
@@ -33,6 +30,6 @@ class HomeController extends Controller
         // Get latest testimonials
         $testimonials = Testimoni::latest()->take(6)->get();
 
-        return view('pilates', compact('categories', 'featured', 'products', 'latestArticles', 'testimonials'));
+        return view('pilates', compact('featured', 'products', 'latestArticles', 'testimonials'));
     }
 }

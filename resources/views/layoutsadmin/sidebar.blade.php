@@ -42,12 +42,7 @@
             <span class="font-medium">Testimoni</span>
         </a>
 
-        <!-- Kategori Produk -->
-        <a href="{{ route('admin.kategori-produks.index') }}"
-            class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.kategori-produks.*') ? 'bg-gradient-primary text-white' : 'hover:bg-blue-400/10 theme-text-secondary hover:text-blue-400' }} transition-all duration-300 animate-slide-in-left delay-400">
-            <i class="fas fa-tags text-lg"></i>
-            <span class="font-medium">Kategori Produk</span>
-        </a>
+
 
         <!-- Produk -->
         <a href="{{ route('admin.produk.index') }}"

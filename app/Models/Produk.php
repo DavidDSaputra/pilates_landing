@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\KategoriProduk;
 use App\Traits\LogsActivity;
-use App\Models\GambarProduk;
 
 class Produk extends Model
 {
@@ -15,7 +13,6 @@ class Produk extends Model
     protected $table = 'produk';
 
     protected $fillable = [
-        'kategori_id',
         'nama_produk',
         'slug',
         'deskripsi_lengkap',
@@ -27,11 +24,6 @@ class Produk extends Model
         'og_image',
         'canonical_url',
     ];
-
-    public function kategori()
-    {
-        return $this->belongsTo(KategoriProduk::class, 'kategori_id');
-    }
 
     public function gambar()
     {

@@ -43,21 +43,7 @@
                             class="w-full px-4 py-2.5 theme-bg-secondary theme-border border rounded-lg focus:outline-none focus:border-blue-400 transition theme-text-primary">
                     </div>
 
-                    <!-- Kategori Filter -->
-                    <div>
-                        <label for="kategori" class="block text-sm font-semibold theme-text-secondary mb-2">
-                            <i class="fas fa-tags mr-1 opacity-70"></i>Kategori
-                        </label>
-                        <select id="kategori" name="kategori"
-                            class="w-full px-4 py-2.5 theme-bg-secondary theme-border border rounded-lg focus:outline-none focus:border-blue-400 transition theme-text-primary">
-                            <option value="">Semua Kategori</option>
-                            @foreach ($kategori as $kat)
-                                <option value="{{ $kat->id }}" {{ request('kategori') == $kat->id ? 'selected' : '' }}>
-                                    {{ $kat->nama_kategori }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
                 </div>
 
                 <!-- Filter Buttons -->
@@ -75,7 +61,7 @@
                 </div>
 
                 <!-- Active Filters Display -->
-                @if (request()->hasAny(['search', 'kategori']))
+                @if (request()->hasAny(['search']))
                     <div class="flex flex-wrap gap-2 pt-4 theme-border border-t border-dashed mt-4">
                         <span class="text-sm font-medium theme-text-secondary">Filter Aktif:</span>
                         @if (request('search'))
@@ -84,13 +70,7 @@
                                 <i class="fas fa-search mr-1"></i>{{ request('search') }}
                             </span>
                         @endif
-                        @if (request('kategori'))
-                            <span
-                                class="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium border border-blue-500/20">
-                                <i
-                                    class="fas fa-tags mr-1"></i>{{ $kategori->find(request('kategori'))->nama_kategori ?? 'Unknown' }}
-                            </span>
-                        @endif
+
                     </div>
                 @endif
             </form>
@@ -112,10 +92,7 @@
                                 class="px-6 py-4 text-left text-xs font-semibold theme-text-primary uppercase tracking-wider">
                                 Produk
                             </th>
-                            <th
-                                class="px-6 py-4 text-left text-xs font-semibold theme-text-primary uppercase tracking-wider">
-                                Kategori
-                            </th>
+
                             <th
                                 class="px-6 py-4 text-left text-xs font-semibold theme-text-primary uppercase tracking-wider">
                                 Galeri
@@ -149,12 +126,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                                        {{ $item->kategori->nama_kategori ?? '-' }}
-                                    </span>
-                                </td>
+
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if ($item->gambar->count() > 0)
                                         <span
@@ -200,7 +172,7 @@
                                     <div class="flex flex-col items-center justify-center">
                                         <i class="fas fa-box-open text-5xl theme-text-secondary mb-4 opacity-20"></i>
                                         <p class="theme-text-secondary font-medium">Tidak ada produk</p>
-                                        @if (request()->hasAny(['search', 'kategori']))
+                                        @if (request()->hasAny(['search']))
                                             <a href="{{ route('admin.produk.index') }}"
                                                 class="mt-2 text-blue-400 hover:text-blue-300 text-sm">
                                                 Reset filter untuk melihat semua produk
@@ -237,10 +209,7 @@
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-base font-semibold theme-text-primary mb-1">{{ $item->nama_produk }}</h3>
                                 <div class="flex items-center gap-2 mb-2">
-                                    <span
-                                        class="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                                        {{ $item->kategori->nama_kategori ?? '-' }}
-                                    </span>
+
                                     @if ($item->gambar->count() > 0)
                                         <span
                                             class="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
