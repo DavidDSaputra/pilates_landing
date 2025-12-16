@@ -11,6 +11,9 @@ use App\Http\Controllers\DashboardController;
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/produk', [ProdukController::class, 'list'])->name('produk.index');
+Route::get('/produk/{slug}', [ProdukController::class, 'detail'])->name('produk.detail');
+
 Route::get('/artikel', [ArtikelController::class, 'list'])->name('artikels.index');
 Route::get('/artikel/{slug}', [ArtikelController::class, 'detail'])->name('artikel.detail');
 

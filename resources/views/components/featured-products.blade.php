@@ -41,7 +41,7 @@
                             {!! Str::limit(strip_tags($product->deskripsi_lengkap), 150) !!}
                         </div>
 
-                        <a href="#"
+                        <a href="{{ route('produk.detail', $product->slug) }}"
                             class="block w-full text-center py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg border"
                             style="background-color: var(--bg-primary); color: var(--text-primary); border-color: var(--border-color);">
                             Lihat Detail
