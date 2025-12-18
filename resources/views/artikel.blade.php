@@ -43,72 +43,44 @@
             </div>
 
             <!-- Articles Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-grid">
-                @php
-                    $articles = [
-                        [
-                            'title' => 'Panduan Memilih Reformer untuk Studio Baru',
-                            'excerpt' => 'Tips memilih Pilates Reformer yang tepat untuk studio Anda, dari material hingga fitur yang harus diperhatikan.',
-                            'date' => '10 Des 2024',
-                            'category' => 'Peralatan'
-                        ],
-                        [
-                            'title' => 'Cara Merawat Peralatan Pilates Agar Awet',
-                            'excerpt' => 'Panduan lengkap perawatan rutin untuk menjaga kualitas dan umur peralatan Pilates studio Anda.',
-                            'date' => '8 Des 2024',
-                            'category' => 'Tips'
-                        ],
-                        [
-                            'title' => 'Strategi Marketing untuk Studio Pilates',
-                            'excerpt' => 'Cara efektif memasarkan studio Pilates Anda dan menarik lebih banyak klien di era digital.',
-                            'date' => '5 Des 2024',
-                            'category' => 'Bisnis'
-                        ],
-                        [
-                            'title' => 'Perbedaan Reformer Aluminium vs Kayu',
-                            'excerpt' => 'Perbandingan detail antara Reformer berbahan aluminium dan kayu untuk membantu Anda memilih.',
-                            'date' => '3 Des 2024',
-                            'category' => 'Peralatan'
-                        ],
-                        [
-                            'title' => 'Setup Studio Pilates: Checklist Lengkap',
-                            'excerpt' => 'Daftar lengkap peralatan dan persiapan yang dibutuhkan untuk membuka studio Pilates profesional.',
-                            'date' => '1 Des 2024',
-                            'category' => 'Panduan'
-                        ],
-                        [
-                            'title' => 'Tren Pilates 2024 di Indonesia',
-                            'excerpt' => 'Perkembangan terbaru industri Pilates di Indonesia dan peluang bisnis yang menjanjikan.',
-                            'date' => '28 Nov 2024',
-                            'category' => 'Bisnis'
-                        ]
-                    ];
-                @endphp
-
-                @foreach($articles as $index => $article)
+                @forelse($artikels as $article)
                     <article
-                        class="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 border group stagger-item"
+                        class="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 border group stagger-item flex flex-col h-full"
                         style="background-color: var(--bg-secondary); border-color: var(--border-color);">
-                        <div class="p-6">
+                        
+                        @if($article->gambar_featured)
+                        <div class="aspect-video overflow-hidden">
+                            <img src="{{ asset('storage/' . $article->gambar_featured) }}" alt="{{ $article->judul }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        @else
+                        {{-- Fallback image or pattern could go here --}}
+                        <div class="aspect-video bg-gray-800 flex items-center justify-center">
+                            <i class="fas fa-newspaper text-4xl text-gray-600"></i>
+                        </div>
+                        @endif
+
+                        <div class="p-6 flex-1 flex flex-col">
                             <div class="flex items-center gap-2 mb-3">
                                 <span class="text-xs font-semibold px-3 py-1 rounded-full"
                                     style="background-color: var(--bg-tertiary); color: var(--accent-primary);">
-                                    {{ $article['category'] }}
+                                    {{ is_array($article->tags) && count($article->tags) > 0 ? $article->tags[0] : 'Umum' }}
                                 </span>
-                                <span class="text-xs" style="color: var(--text-tertiary);">{{ $article['date'] }}</span>
+                                <span class="text-xs" style="color: var(--text-tertiary);">
+                                    {{ $article->created_at->format('d M Y') }}
+                                </span>
                             </div>
 
-                            <h3 class="text-xl font-bold mb-3 group-hover:text-opacity-80 transition-opacity"
+                            <h3 class="text-xl font-bold mb-3 group-hover:text-opacity-80 transition-opacity line-clamp-2"
                                 style="color: var(--text-primary);">
-                                {{ $article['title'] }}
+                                {{ $article->judul }}
                             </h3>
 
-                            <p class="text-sm leading-relaxed mb-4" style="color: var(--text-secondary);">
-                                {{ $article['excerpt'] }}
+                            <p class="text-sm leading-relaxed mb-4 flex-1 line-clamp-3" style="color: var(--text-secondary);">
+                                {{ $article->excerpt }}
                             </p>
 
-                            <a href="#"
-                                class="inline-flex items-center gap-2 text-sm font-semibold transition-all group-hover:gap-3"
+                            <a href="{{ route('artikel.detail', $article->slug) }}"
+                                class="inline-flex items-center gap-2 text-sm font-semibold transition-all group-hover:gap-3 mt-auto"
                                 style="color: var(--accent-primary);">
                                 Baca Selengkapnya
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,8 +90,20 @@
                             </a>
                         </div>
                     </article>
-                @endforeach
+                @empty
+                    <div class="col-span-full text-center py-16">
+                        <div class="inline-block p-4 rounded-full bg-gray-100 mb-4 dark:bg-gray-800">
+                            <i class="far fa-newspaper text-3xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2" style="color: var(--text-primary);">Belum ada artikel</h3>
+                        <p style="color: var(--text-secondary);">Silakan kembali lagi nanti untuk update terbaru.</p>
+                    </div>
+                @endforelse
             </div>
+
+            {{-- Pagination --}}
+            <div class="mt-12 flex justify-center">
+                {{ $artikels->links() }}
 
         </div>
     </div>

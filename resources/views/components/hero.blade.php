@@ -74,17 +74,20 @@
                     {{-- Slides --}}
                     <div class="hero-slide active absolute inset-0 transition-opacity duration-700"
                         style="background-color: var(--bg-secondary);">
-                        <img src="/images/reformer.png" alt="Pilates Reformer" class="w-full h-full object-cover" />
+                        <img src="{{ asset('images/reformer.png') }}" alt="Pilates Reformer"
+                            class="w-full h-full object-cover" />
                     </div>
 
                     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0"
                         style="background-color: var(--bg-secondary);">
-                        <img src="/images/cadillac.png" alt="Cadillac Tower" class="w-full h-full object-cover" />
+                        <img src="{{ asset('images/cadillac.png') }}" alt="Cadillac Tower"
+                            class="w-full h-full object-cover" />
                     </div>
 
                     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0"
                         style="background-color: var(--bg-secondary);">
-                        <img src="/images/chair.png" alt="Wunda Chair" class="w-full h-full object-cover" />
+                        <img src="{{ asset('images/chair.png') }}" alt="Wunda Chair"
+                            class="w-full h-full object-cover" />
                     </div>
 
                     {{-- Slider Dots --}}

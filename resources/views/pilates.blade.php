@@ -34,9 +34,10 @@
     <div class="app">
         <section id="hero"><x-hero /></section>
         <section id="features"><x-why-choose-us /></section>
-        <section id="products"><x-featured-products /></section>
+        <section id="products"><x-featured-products :products="$featured" /></section>
         <section id="pricing"><x-pricing /></section>
-        <section id="testimonials"><x-testimonials /></section>
+        <section id="testimonials"><x-testimonials :testimonials="$testimonials" /></section>
+        <section id="articles"><x-latest-articles :articles="$latestArticles" /></section>
         <section id="cta"><x-cta /></section>
     </div>
 

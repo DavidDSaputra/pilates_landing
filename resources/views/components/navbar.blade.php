@@ -4,23 +4,24 @@
         <div class="flex items-center justify-between h-20">
 
             {{-- Logo --}}
-            <a href="/" class="text-2xl font-bold" style="color: var(--text-primary);">
+            <a href="https://www.joulwinn.com/pilates/#hero" class="text-2xl font-bold"
+                style="color: var(--text-primary);">
                 <span style="color: var(--accent-primary);">Pilates</span>Pro
             </a>
 
             {{-- Desktop Navigation --}}
             <div class="hidden md:flex items-center gap-8">
-                <a href="#hero" class="text-sm font-medium transition-colors hover:opacity-80"
+                <a href="{{ url('/#hero') }}" class="text-sm font-medium transition-colors hover:opacity-80"
                     style="color: var(--text-secondary);">Beranda</a>
-                <a href="#features" class="text-sm font-medium transition-colors hover:opacity-80"
+                <a href="{{ url('/#features') }}" class="text-sm font-medium transition-colors hover:opacity-80"
                     style="color: var(--text-secondary);">Keunggulan</a>
-                <a href="#products" class="text-sm font-medium transition-colors hover:opacity-80"
+                <a href="{{ url('/#products') }}" class="text-sm font-medium transition-colors hover:opacity-80"
                     style="color: var(--text-secondary);">Produk</a>
-                <a href="#pricing" class="text-sm font-medium transition-colors hover:opacity-80"
+                <a href="{{ url('/#pricing') }}" class="text-sm font-medium transition-colors hover:opacity-80"
                     style="color: var(--text-secondary);">Harga</a>
-                <a href="/artikel" class="text-sm font-medium transition-colors hover:opacity-80"
+                <a href="{{ url('/artikel') }}" class="text-sm font-medium transition-colors hover:opacity-80"
                     style="color: var(--text-secondary);">Artikel</a>
-                <a href="#cta"
+                <a href="{{ url('/#cta') }}"
                     class="px-6 py-2 rounded-lg font-semibold text-white text-sm transition-all duration-300 hover:shadow-lg"
                     style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));">
                     Hubungi Kami
@@ -39,17 +40,17 @@
         {{-- Mobile Menu --}}
         <div id="mobile-menu" class="hidden md:hidden pb-4">
             <div class="flex flex-col gap-4">
-                <a href="#hero" class="text-sm font-medium transition-colors"
+                <a href="{{ url('/#hero') }}" class="text-sm font-medium transition-colors"
                     style="color: var(--text-secondary);">Beranda</a>
-                <a href="#features" class="text-sm font-medium transition-colors"
+                <a href="{{ url('/#features') }}" class="text-sm font-medium transition-colors"
                     style="color: var(--text-secondary);">Keunggulan</a>
-                <a href="#products" class="text-sm font-medium transition-colors"
+                <a href="{{ url('/#products') }}" class="text-sm font-medium transition-colors"
                     style="color: var(--text-secondary);">Produk</a>
-                <a href="#pricing" class="text-sm font-medium transition-colors"
+                <a href="{{ url('/#pricing') }}" class="text-sm font-medium transition-colors"
                     style="color: var(--text-secondary);">Harga</a>
-                <a href="/artikel" class="text-sm font-medium transition-colors"
+                <a href="{{ url('/artikel') }}" class="text-sm font-medium transition-colors"
                     style="color: var(--text-secondary);">Artikel</a>
-                <a href="#cta" class="px-6 py-2 rounded-lg font-semibold text-white text-sm text-center"
+                <a href="/#cta" class="px-6 py-2 rounded-lg font-semibold text-white text-sm text-center"
                     style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));">
                     Hubungi Kami
                 </a>
