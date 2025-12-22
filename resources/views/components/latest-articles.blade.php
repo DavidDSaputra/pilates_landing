@@ -48,7 +48,7 @@
                             {!! Str::limit(strip_tags($article->img_alt ?? $article->konten), 120) !!}
                         </div>
 
-                        <a href="{{ route('artikels.show', $article->slug ?? '#') }}"
+                        <a href="{{ route('artikel.detail', $article->slug ?? '#') }}"
                             class="inline-flex items-center gap-2 text-sm font-semibold transition-all group-hover:gap-3 mt-auto"
                             style="color: var(--accent-primary);">
                             Baca Selengkapnya

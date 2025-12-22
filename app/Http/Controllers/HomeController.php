@@ -19,11 +19,9 @@ class HomeController extends Controller
         // For the grid, we'll show products with gambar_utama or the first gambar
         $products = Produk::with('gambar')->orderBy('created_at', 'desc')->take(24)->get();
 
-        // Get latest 3 published articles
+        // Get latest 3 articles
         $latestArticles = Artikel::with('penulis')
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now())
-            ->latest('published_at')
+            ->latest('created_at')
             ->take(3)
             ->get();
 

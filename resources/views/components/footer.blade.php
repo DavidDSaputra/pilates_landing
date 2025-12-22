@@ -60,7 +60,7 @@
         {{-- Bottom Section: Copyright --}}
         <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-sm" style="color: var(--text-tertiary);">
-                © 2024 PilatesPro. All rights reserved.
+                © 2025 Fitwinn. All rights reserved.
             </p>
             <div class="flex items-center gap-6">
                 <a href="#" class="text-sm transition-colors hover:opacity-70"

@@ -6,7 +6,7 @@
             {{-- Logo --}}
             <a href="https://www.joulwinn.com/pilates/#hero" class="text-2xl font-bold"
                 style="color: var(--text-primary);">
-                <span style="color: var(--accent-primary);">Pilates</span>Pro
+                <span style="color: var(--accent-primary);">Fitwinn</span>
             </a>
 
             {{-- Desktop Navigation --}}
